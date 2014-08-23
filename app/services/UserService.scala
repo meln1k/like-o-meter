@@ -2,7 +2,6 @@ package services
 
 import play.api.libs.json.Json
 import scalaj.http.Http
-
 import models.VkUser
 
 /**
@@ -11,11 +10,7 @@ import models.VkUser
 object UserService {
 
   def getUser(uid: Long): VkUser = {
-    val userInfoJson = Json.parse(
-      Http("https://api.vk.com/method/users.get")
-        .param("user_id",uid.toString)
-        .param("fields","photo")
-        .asString)
+    val userInfoJson = Json.parse(VkApiService.usersGet(uid))
 
     val fistName = (userInfoJson \ "response") (0) \ "first_name" toString
     val lastName = (userInfoJson \ "response") (0) \ "last_name" toString
@@ -25,10 +20,7 @@ object UserService {
   }
 
   def getUserFriends(uid: Long): Seq[VkUser] = {
-    val userFriendsJson = Json.parse(
-      Http("https://api.vk.com/method/friends.get")
-        .param("user_id",uid.toString)
-        .asString)
+    val userFriendsJson = Json.parse(VkApiService.friendsGet(uid))
 
     val friends = (userFriendsJson \ "response")
       .toString.filterNot(c => c == '[' || c == ']').split(",")
