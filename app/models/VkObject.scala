@@ -25,3 +25,7 @@ abstract class Item
 case class Photo(id: Long, ownerId: Long, likesCount: Int) extends Item
 case class PhotosList(count: Int, items: IndexedSeq[Photo])
 case class PhotosGetResult(response: PhotosList)
+
+case class Post(id: Long, ownerId: Long, likesCount: Int) extends Item
+case class PostsList(count: Int, items: IndexedSeq[Post])
+case class WallGetResult(response: PostsList)

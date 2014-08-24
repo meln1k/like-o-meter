@@ -1,6 +1,6 @@
 package services
 
-import models.{Photo, Item, VkUser}
+import models.{Post, Photo, Item, VkUser}
 
 /**
  * Created by meln1k on 24/08/14.
@@ -19,9 +19,12 @@ object EntityService {
     userPhotos
   }
 
+  def getUserPosts(user: VkUser) = VkApiService.wallGet(user.id).get.response.items
+
   def getLikedUsers(item: Item): Seq[VkUser] = {
     item match {
-      case Photo(id, ownerId, _) => VkApiService.likesGetList("photo", ownerId, id).get.response.items
+      case Photo(id, ownerId, _) => VkApiService.likesGetList("photo", id, ownerId).get.response.items
+      case Post(id, ownerId, _) => VkApiService.likesGetList("post", id, ownerId).get.response.items
     }
   }
 

@@ -15,9 +15,13 @@ object LikeService {
   }
 
   def getUsersWhoLikedUser(user: VkUser): Seq[(VkUser, Int)] = {
-    val userPhotos = EntityService.getUserPhotos(user)
+    val userPhotos = EntityService.getUserPhotos(user).filter(_.likesCount != 0)
+    val userPosts = EntityService.getUserPosts(user).filter(_.likesCount != 0)
+
     val userPhotoLiked = userPhotos flatMap EntityService.getLikedUsers
-    userPhotoLiked.groupBy(l => l).map(t => (t._1, t._2.length)).toVector.sortBy(_._2)
+    val userPostsLiked = userPosts flatMap EntityService.getLikedUsers
+    
+    (userPhotoLiked ++ userPostsLiked).groupBy(l => l).map(t => (t._1, t._2.length)).toVector.sortBy(_._2)
   }
 
 }

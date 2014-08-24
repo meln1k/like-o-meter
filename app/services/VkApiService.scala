@@ -56,7 +56,7 @@ object VkApiService {
     res.validate[FriendsGetResult].asOpt
   }
 
-  def likesGetList(typ: String, ownerId: Long, itemId: Long) = {
+  def likesGetList(typ: String, itemId: Long, ownerId: Long) = {
 
     implicit val likesListReads: Reads[LikesList] = (
       (JsPath \ 'count).read[Int] and
@@ -123,7 +123,7 @@ object VkApiService {
         (JsPath \ 'items).read[IndexedSeq[Photo]]
       )(PhotosList.apply _)
 
-    implicit val photosGetAlbumsReads: Reads[PhotosGetResult] =
+    implicit val photosGetReads: Reads[PhotosGetResult] =
       (JsPath \ "response").read[PhotosList]
         .map(PhotosGetResult)
 
@@ -137,5 +137,33 @@ object VkApiService {
         .asString
     )
     res.validate[PhotosGetResult].asOpt
+  }
+
+  def wallGet(ownerId: Long) = {
+
+    implicit val videoReads: Reads[Post] = (
+      (JsPath \ "id").read[Long] and
+        (JsPath \ "owner_id").read[Long] and
+        (JsPath \ "likes" \ "count").read[Int]
+      )(Post.apply _)
+
+    implicit val videoListReads: Reads[PostsList] = (
+      (JsPath \ 'count).read[Int] and
+        (JsPath \ 'items).read[IndexedSeq[Post]]
+      )(PostsList.apply _)
+
+    implicit val videoGetReads: Reads[WallGetResult] =
+      (JsPath \ "response").read[PostsList]
+        .map(WallGetResult)
+
+    val res = Json.parse(
+      Http("https://api.vk.com/method/wall.get")
+        .param("owner_id", ownerId.toString)
+        .param("v","5.24")
+        .option(HttpOptions.readTimeout(10000))
+        .asString
+    )
+    res.validate[WallGetResult]
+
   }
 }
