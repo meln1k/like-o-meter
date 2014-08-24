@@ -7,9 +7,8 @@ import play.api.libs.json._
  */
 
 abstract class User
-case class VkUser(id: Long, firstName: String, lastName: String) extends User
-case class VkUserWithPhoto(id: Long, firstName: String, lastName: String, photoLink: String) extends User
-case class UsersGetResult(response: IndexedSeq[User])
+case class VkUser(id: Long, firstName: String, lastName: String)
+case class UsersGetResult(response: IndexedSeq[VkUser])
 
 case class FriendList(count: Int, items: IndexedSeq[VkUser])
 case class FriendsGetResult(response: FriendList)
@@ -21,6 +20,8 @@ case class Album(id: Long, ownerId: Long)
 case class AlbumList(count: Int, items: IndexedSeq[Album])
 case class PhotosGetAlbumsResult(response: AlbumList)
 
-case class Photo(id: Long, ownerId: Long, likesCount: Int)
+abstract class Item
+
+case class Photo(id: Long, ownerId: Long, likesCount: Int) extends Item
 case class PhotosList(count: Int, items: IndexedSeq[Photo])
 case class PhotosGetResult(response: PhotosList)

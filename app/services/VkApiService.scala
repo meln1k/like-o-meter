@@ -18,7 +18,7 @@ object VkApiService {
       (JsPath \ "last_name").read[String]
     )(VkUser.apply _)
 
-  def usersGet(userIds: Seq[Long]) = {
+  def usersGet(userIds: Seq[String]) = {
 
     implicit val usersGetReads: Reads[UsersGetResult] =
       (JsPath \ "response").read[IndexedSeq[VkUser]]
