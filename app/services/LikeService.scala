@@ -20,8 +20,8 @@ object LikeService {
 
     val userPhotoLiked = userPhotos flatMap EntityService.getLikedUsers
     val userPostsLiked = userPosts flatMap EntityService.getLikedUsers
-    
-    (userPhotoLiked ++ userPostsLiked).groupBy(l => l).map(t => (t._1, t._2.length)).toVector.sortBy(_._2)
+
+    (userPhotoLiked ++ userPostsLiked).groupBy(l => l).map(t => (t._1, t._2.length)).toVector.sortBy(-_._2)
   }
 
 }
