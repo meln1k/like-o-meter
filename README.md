@@ -1,3 +1,3 @@
 # Like-O-Meter
 
-just for fun. for vk api learning purpose
+just for fun and vk api learning purpose
